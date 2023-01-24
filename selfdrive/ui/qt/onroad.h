@@ -37,6 +37,7 @@ class AnnotatedCameraWidget : public CameraWidget {
   Q_PROPERTY(bool is_metric MEMBER is_metric);
 
   Q_PROPERTY(bool engageable MEMBER engageable);
+  Q_PROPERTY(bool experimentalModeAvailable MEMBER experimentalModeAvailable);
   Q_PROPERTY(bool dmActive MEMBER dmActive);
   Q_PROPERTY(bool hideDM MEMBER hideDM);
   Q_PROPERTY(bool rightHandDM MEMBER rightHandDM);
@@ -64,6 +65,7 @@ private:
   bool is_cruise_set = false;
   bool is_metric = false;
   bool engageable = false;
+  bool experimentalModeAvailable = false;
   bool dmActive = false;
   bool hideDM = false;
   bool rightHandDM = false;

@@ -192,6 +192,7 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   const bool nav_alive = sm.alive("navInstruction") && sm["navInstruction"].getValid();
 
   const auto cs = sm["controlsState"].getControlsState();
+  const auto cp = sm["carParams"].getCarParams();
 
   // Handle older routes where vCruiseCluster is not set
   float v_cruise =  cs.getVCruiseCluster() == 0.0 ? cs.getVCruise() : cs.getVCruiseCluster();
@@ -231,6 +232,7 @@ void AnnotatedCameraWidget::updateState(const UIState &s) {
   // update engageability and DM icons at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
     setProperty("engageable", cs.getEngageable() || cs.getEnabled());
+    setProperty("experimentalModeAvailable", cp.getExperimentalLongitudinalAvailable() ? params.getBool("ExperimentalLongitudinalEnabled") : cp.getOpenpilotLongitudinalControl());
     setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
     setProperty("rightHandDM", sm["driverMonitoringState"].getDriverMonitoringState().getIsRHD());
   }
@@ -407,11 +409,9 @@ void AnnotatedCameraWidget::mousePressEvent(QMouseEvent* e) {
   const int exp_btn_w = radius + bdr_s * 4;
   const int exp_btn_h = radius + bdr_s * 3;
 
-  if (engageable) {
-    if (params.getBool("ExperimentalModeConfirmed") && e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
-      params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
-      return;
-    }
+  if (engageable && experimental_mode_available && e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
+    params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
+    return;
   }
 
   QWidget::mousePressEvent(e);
