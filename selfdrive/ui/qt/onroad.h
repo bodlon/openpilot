@@ -47,6 +47,8 @@ public:
   void updateState(const UIState &s);
 
 private:
+  void mousePressEvent(QMouseEvent* e) override;
+
   void drawIcon(QPainter &p, int x, int y, QPixmap &img, QBrush bg, float opacity);
   void drawText(QPainter &p, int x, int y, const QString &text, int alpha = 255);
 

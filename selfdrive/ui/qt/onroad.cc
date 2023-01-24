@@ -402,6 +402,23 @@ void AnnotatedCameraWidget::drawHud(QPainter &p) {
 // Window that shows camera view and variety of
 // info drawn on top
 
+void AnnotatedCameraWidget::mousePressEvent(QMouseEvent* e) {
+  const int exp_btn_w = radius + bdr_s * 4;
+  const int exp_btn_h = radius + bdr_s * 3;
+
+  if (engageable) {
+    auto params = Params();
+    if (params.getBool("ExperimentalModeConfirmed")) {
+      if (e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
+        params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
+        return;
+      }
+    }
+  }
+
+  QWidget::mousePressEvent(e);
+}
+
 void AnnotatedCameraWidget::drawText(QPainter &p, int x, int y, const QString &text, int alpha) {
   QRect real_rect = getTextRect(p, 0, text);
   real_rect.moveCenter({x, y - real_rect.height() / 2});
