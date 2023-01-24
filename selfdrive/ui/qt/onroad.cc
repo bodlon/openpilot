@@ -177,6 +177,7 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
 
 AnnotatedCameraWidget::AnnotatedCameraWidget(VisionStreamType type, QWidget* parent) : fps_filter(UI_FREQ, 3, 1. / UI_FREQ), CameraWidget("camerad", type, true, parent) {
   pm = std::make_unique<PubMaster, const std::initializer_list<const char *>>({"uiDebug"});
+  params = Params();
 
   engage_img = loadPixmap("../assets/img_chffr_wheel.png", {img_size, img_size});
   experimental_img = loadPixmap("../assets/img_experimental.svg", {img_size - 5, img_size - 5});
@@ -407,7 +408,6 @@ void AnnotatedCameraWidget::mousePressEvent(QMouseEvent* e) {
   const int exp_btn_h = radius + bdr_s * 3;
 
   if (engageable) {
-    auto params = Params();
     if (params.getBool("ExperimentalModeConfirmed") && e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
       params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
       return;
