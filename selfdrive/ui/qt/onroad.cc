@@ -408,11 +408,9 @@ void AnnotatedCameraWidget::mousePressEvent(QMouseEvent* e) {
 
   if (engageable) {
     auto params = Params();
-    if (params.getBool("ExperimentalModeConfirmed")) {
-      if (e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
-        params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
-        return;
-      }
+    if (params.getBool("ExperimentalModeConfirmed") && e->x() > rect().right() - exp_btn_w && e->y() < exp_btn_h) {
+      params.putBool("ExperimentalMode", !params.getBool("ExperimentalMode"));
+      return;
     }
   }
 
