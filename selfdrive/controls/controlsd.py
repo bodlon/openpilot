@@ -144,6 +144,7 @@ class Controls:
       self.params.remove("ExperimentalLongitudinalEnabled")
     if not self.CP.openpilotLongitudinalControl:
       self.params.remove("ExperimentalMode")
+      self.params.remove("ExperimentalModeConfirmed")
 
     self.CC = car.CarControl.new_message()
     self.CS_prev = car.CarState.new_message()
