@@ -1,19 +1,14 @@
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Union
 
 from cereal import car
-from selfdrive.car import dbc_dict
+from selfdrive.car import AngleRateLimit, dbc_dict
 from selfdrive.car.docs_definitions import CarInfo, Harness
 from selfdrive.car.fw_query_definitions import FwQueryConfig, Request, StdQueries
 
-CarParams = car.CarParams
-Ecu = CarParams.Ecu
-TransmissionType = CarParams.TransmissionType
-GearShifter = car.CarState.GearShifter
-
-CurvatureLimit = namedtuple('CurvatureLimit', ['speed_bp', 'curvature_v'])
+Ecu = car.CarParams.Ecu
 
 
 class CarControllerParams:
@@ -31,8 +26,10 @@ class CarControllerParams:
   CURVATURE_MAX = 0.02          # Max curvature for steering command, m^-1
   STEER_DRIVER_ALLOWANCE = 0.8  # Driver intervention threshold, Nm
 
-  CURVATURE_RATE_LIMIT_UP = CurvatureLimit(speed_bp=[5, 15, 25], curvature_v=[0.005, 0.00056, 0.0002])
-  CURVATURE_RATE_LIMIT_DOWN = CurvatureLimit(speed_bp=[5, 15, 25], curvature_v=[0.008, 0.00089, 0.00032])
+  # Curvature rate limits
+  # TODO: unify field names used by curvature and angle control cars
+  ANGLE_RATE_LIMIT_UP = AngleRateLimit(speed_bp=[5, 15, 25], angle_v=[0.005, 0.00056, 0.0002])
+  ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[5, 15, 25], angle_v=[0.008, 0.00089, 0.00032])
 
   ACCEL_MAX = 2.0               # m/s^s max acceleration
   ACCEL_MIN = -3.5              # m/s^s max deceleration

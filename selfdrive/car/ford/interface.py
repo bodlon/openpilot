@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
+from cereal import car
 from common.conversions import Conversions as CV
 from selfdrive.car import STD_CARGO_KG, get_safety_config
-from selfdrive.car.ford.values import CAR, CarParams, Ecu, GearShifter, TransmissionType
+from selfdrive.car.ford.values import CAR, Ecu
 from selfdrive.car.interfaces import CarInterfaceBase
+
+GearShifter = car.CarState.GearShifter
+TransmissionType = car.CarParams.TransmissionType
 
 
 class CarInterface(CarInterfaceBase):
   @staticmethod
   def _get_params(ret, candidate, fingerprint, car_fw, experimental_long):
     ret.carName = "ford"
-    ret.safetyConfigs = [get_safety_config(CarParams.SafetyModel.ford)]
+    ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.ford)]
     ret.openpilotLongitudinalControl = True
 
     # These cars are dashcam only until the port is finished
     ret.dashcamOnly = True
 
-    # curvature steering
-    ret.steerControlType = CarParams.SteerControlType.curvature
-    ret.steerActuatorDelay = 0.15
+    ret.steerControlType = car.CarParams.SteerControlType.angle
+    ret.steerActuatorDelay = 0.25
     ret.steerLimitTimer = 1.0
     ret.lateralTuning.pid.kpBP, ret.lateralTuning.pid.kiBP = [[0.], [0.]]
     ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.008], [0.]]
