@@ -1,3 +1,4 @@
+import os
 import math
 from cereal import car
 from common.numpy_fast import clip
@@ -65,11 +66,16 @@ class CarController:
         ramp_type = 2
       else:
         ramp_type = 3
-      precision = 1  # 0=Comfortable, 1=Precise (the stock system always uses comfortable)
+      ramp_type = 0
+      precision = 0  # 1  # 0=Comfortable, 1=Precise (the stock system always uses comfortable)
+
+      # TODO: should be flipped, right? roughly estimated to factor of 10
+      path_angle = (CS.out.steeringAngleDeg - actuators.steeringAngleDeg) / 10.
+      path_angle = path_angle if os.path.exists('/data/use_pa') else 0
 
       self.apply_curvature_last = apply_curvature
       can_sends.append(create_lka_msg(self.packer))
-      can_sends.append(create_lat_ctl_msg(self.packer, CC.latActive, ramp_type, precision, 0., 0., -apply_curvature, 0.))
+      can_sends.append(create_lat_ctl_msg(self.packer, CC.latActive, ramp_type, precision, 0., -path_angle, -apply_curvature, 0.))
 
     ### ui ###
     send_ui = (self.main_on_last != main_on) or (self.lkas_enabled_last != CC.latActive) or (self.steer_alert_last != steer_alert)
