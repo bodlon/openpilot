@@ -67,11 +67,12 @@ class CarController:
       else:
         ramp_type = 3
       ramp_type = 0
-      precision = 0  # 1  # 0=Comfortable, 1=Precise (the stock system always uses comfortable)
+      precision = 1  # 1  # 0=Comfortable, 1=Precise (the stock system always uses comfortable)
 
       # TODO: should be flipped, right? roughly estimated to factor of 10
-      path_angle = (CS.out.steeringAngleDeg - actuators.steeringAngleDeg) / 10.
-      path_angle = path_angle if os.path.exists('/data/use_pa') else 0
+      # path_angle = (CS.out.steeringAngleDeg - actuators.steeringAngleDeg) / 10.
+      # path_angle = path_angle if os.path.exists('/data/use_pa') else 0
+      path_angle = 0
 
       self.apply_curvature_last = apply_curvature
       can_sends.append(create_lka_msg(self.packer))
